@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .card-custom {
+            width: 100%;
+            max-width: 320px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .card-custom img {
+            height: 150px;
+            object-fit: cover;
+        }
+        .card-body {
+            padding: 15px;
+        }
+        .card-body p {
+            margin-bottom: 10px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+        hr {
+            border: 0;
+            border-top: 2px solid #007bff;
+            margin: 40px 0;
+        }
+        .text-bg-primary {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+            border-radius: 20px;
+            padding: 5px 20px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="text-bg-primary mb-3">
+        <h1>Groups</h1>
+    </div>
+    <div class="mb-3">
+        <a th:href="@{/companies/{companyId}/courses/{courseId}/groups/formGroup(companyId=${company.getId()}, courseId=${course.getId()})}" class="btn btn-custom">Add Group</a>
+        <a th:href="@{/companies/{id}/get(id=${company.id})}" class="btn btn-custom">Back</a>
+    </div>
+    <div class="card-container" >
+        <div th:each="group : ${allGroupsCourses}" class="card card-custom">
+            <img th:src="${group.imageLink}" alt="Group Image" class="card-img-top">
+            <div class="card-body">
+                <p><strong>Group Name:</strong> <span th:text="${group.groupName}"></span></p>
+                <p><strong>Description:</strong> <span th:text="${group.description}"></span></p>
+                <div class="d-flex gap-2 mt-3">
+                    <a th:href="@{/companies/{companyId}/courses/{courseId}/groups/{id}/getGroup(companyId=${company.id},courseId=${course.id},id=${group.id})}" class="btn btn-custom">Open</a>
+                    <a th:href="@{/companies/{companyId}/courses/{courseId}/groups/{id}/updateForm(companyId=${company.id},courseId=${course.id},id=${group.id})}" class="btn btn-custom">Update</a>
+                    <form th:action="@{/companies/{companyId}/courses/{courseId}/groups/deleteGroup/{id}(companyId=${company.id},courseId=${course.id},id=${group.id})}" method="post">
+                        <button class="btn btn-custom" type="submit">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-bg-primary mb-3">
+        <h1>Lessons</h1>
+    </div>
+    <div class="mb-3">
+        <a th:href="@{/companies/{companyId}/courses/{courseId}/get/lessons/createLesson(companyId=${company.getId()}, courseId=${course.getId()})}" class="btn btn-custom">Add Lesson</a>
+    </div>
+    <div class="card-container">
+        <div th:each="lesson : ${allLessons}" class="card card-custom">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${lesson.lessonName}">Lesson Name</h5>
+                <div class="d-flex gap-2 mt-3">
+                    <a th:href="@{/companies/{companyId}/courses/{courseId}/get/lessons/{id}/get(companyId=${company.getId()}, courseId=${course.getId()}, id=${lesson.getId()})}" class="btn btn-custom">Open</a>
+                    <a th:href="@{/companies/{companyId}/courses/{courseId}/get/lessons/{id}/update(companyId=${company.getId()},courseId=${course.getId()}, id=${lesson.getId()})}" class="btn btn-custom">Update</a>
+                    <form th:method="post" th:action="@{/companies/{companyId}/courses/{courseId}/get/lessons/{id}/delete(companyId=${company.getId()}, courseId=${course.getId()}, id=${lesson.getId()})}">
+                        <button class="btn btn-custom" type="submit">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div >
+    <p>
+
+    </p>
+
+    <div class="text-bg-primary mb-3">
+        <h1>Instructors</h1>
+    </div>
+    <form th:action="@{/companies/{companyId}/courses/{id}/assign(companyId=${companyId}, id=${courseId})}" method="post">
+        <div class="mb-3">
+            <label for="instructorSelect">Assign Instructor:</label>
+            <select id="instructorSelect" name="instructorId" class="form-select">
+                <option value="" disabled selected>Select an Instructor</option>
+                <option th:each="instructor : ${allInstructors}" th:value="${instructor.id}" th:text="${instructor.firstName}">
+                </option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Assign</button>
+    </form>
+    <div class="mb-3">
+         </div>
+    <div class="container">
+        <div class="card card-custom">
+            <div th:each="ins: ${allInstructors}" class="card-body">
+                <div>
+                    <span class="label">First name:</span>
+                    <span th:text="${ins.firstName}">First name</span>
+                </div>
+                <div>
+                    <span class="label">Last name:</span>
+                    <span th:text="${ins.lastName}">Last name</span>
+                </div>
+                <div>
+                    <span class="label">Phone number:</span>
+                    <span th:text="${ins.phoneNumber}">Phone number</span>
+                </div>
+                <div>
+                    <span class="label">Specialization:</span>
+                    <span th:text="${ins.specialization}">Specialization</span>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                    <a th:href="@{/companies/{companyId}/courses/{courseId}/lessons/{id}/view(companyId=${company.getId()}, courseId=${course.getId()}, id=${lesson.id})}" class="btn btn-custom">Open</a>
+                    <a th:href="@{/companies/{companyId}/courses/{courseId}/get/{id}/update(companyId=${company.getId()},courseId=${course.getId()}, id=${lesson.id})}" class="btn btn-custom">Update</a>
+                    <form th:method="GET" th:action="@{/companies/{companyId}/courses/{courseId}/get/{id}/delete(companyId=${company.getId()}, courseId=${course.getId()}, id=${lesson.id})}" class="d-inline">
+                        <button class="btn btn-custom" type="submit">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

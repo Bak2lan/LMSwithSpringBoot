@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .card-body {
+            padding: 20px;
+            background-color: #ffffff;
+        }
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        h1, h2 {
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.1rem;
+            color: #495057;
+        }
+        .text-bg-primary {
+            background-color: #007bff;
+            color: #fff;
+            padding: 1px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="text-bg-primary mb-3">
+        <h1 th:text="${getCompany.name}"></h1>
+    </div>
+    <div class="text-center mb-3">
+        <img th:src="@{${getCompany.image}}" alt="Company Image" class="company-image">
+    </div>
+    <p><strong>Name:</strong> <span th:text="${getCompany.getName()}"></span></p>
+    <hr>
+    <p><strong>Country:</strong> <span th:text="${getCompany.getCountry()}"></span></p>
+    <hr>
+    <p><strong>Address:</strong> <span th:text="${getCompany.getAddress()}"></span></p>
+    <hr>
+    <p><strong>Phone Number:</strong> <span th:text="${getCompany.getPhoneNumber()}"></span></p>
+    <hr>
+
+    <div class="text-center mt-4">
+        <a th:href="@{/companies}" class="btn btn-secondary mt-2">Back to Company</a>
+
+    </div>
+
+    <div class="text-bg-primary mb-3 mt-4">
+        <h2>Courses</h2>
+    </div>
+    <div class="text-center mt-4">
+        <h2 class="mt-4">
+            <a th:href="@{/companies/{companyId}/courses/create(companyId=${getCompany.id})}" class="btn btn-custom">
+                Add Course
+            </a>
+        </h2>
+    </div>
+
+    <div class="row">
+        <div th:each="course : ${courses}" class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <strong>Name:</strong> <span th:text="${course.courseName}">Course Name</span>
+                    </h5>
+                    <p class="card-text">
+                        <strong>Description:</strong> <span th:text="${course.description}"></span>
+                    </p>
+                    <p class="card-text">
+                        <strong>Date of Start:</strong> <span th:text="${course.dateOfStart}"></span>
+                    </p>
+                    <a th:href="@{/companies/{companyId}/courses/{courseId}/get(companyId=${getCompany.id}, courseId=${course.id})}" class="btn btn-primary">Open</a>
+                    <div class="mt-3">
+                        <a th:href="@{/companies/{companyId}/courses/{id}/form(companyId=${getCompany.id},id=${course.id})}" class="btn btn-custom">Update</a>
+                        <form th:action="@{/companies/{companyId}/courses/{id}/delete(companyId=${getCompany.id},id=${course.id})}" method="post" class="d-inline">
+                            <button class="btn btn-custom" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="text-bg-primary mb-3 mt-4">
+        <h2>Instructors</h2>
+    </div>
+    <div class="text-center mt-4">
+        <h2>
+            <a th:href="@{/companies/instructor/create/{companyId}(companyId=${getCompany.id})}" class="btn btn-custom">
+                Add Instructors
+            </a>
+        </h2>
+    </div>
+
+    <div class="course-list">
+        <div class="row">
+            <div th:each="instructor : ${allInst}" class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <p><strong>First Name:</strong> <span th:text="${instructor.firstName}">First Name</span></p>
+                        <p><strong>Last Name:</strong> <span th:text="${instructor.lastName}">Last Name</span></p>
+                        <p><strong>Specialization:</strong> <span th:text="${instructor.specialization}">Specialization</span></p>
+                        <p><strong>Phone Number:</strong> <span th:text="${instructor.phoneNumber}">Phone Number</span></p>
+                        <div class="mt-3">
+                            <a th:href="@{/companies/{companyId}/get/{id}(companyId=${getCompany.id},id=${instructor.id})}" class="btn btn-custom">Open</a>
+                            <a th:href="@{/companies/{companyId}/form/{id}(companyId=${getCompany.id},id=${instructor.id})}" class="btn btn-custom">Update</a>
+                            <form th:action="@{/companies/{companyId}/delete/{id}(companyId=${getCompany.id},id=${instructor.id})}" method="post" class="d-inline">
+                                <button class="btn btn-custom" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

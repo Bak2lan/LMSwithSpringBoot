@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 30px;
+        }
+        .text-bg-primary {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            width: 100%; /* чтобы заголовок занимал всю ширину контейнера */
+            margin-bottom: 1rem; /* отступ снизу для разделения с карточками */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="text-bg-primary mb-3">
+        <h1>Instructor courses</h1>
+    </div>
+    <div th:each="course : ${allCourses}" class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">
+                <strong>Name:</strong> <span th:text="${course.courseName}">Card title</span>
+            </h5>
+            <p class="card-text">
+                <strong>Description:</strong> <span th:text="${course.description}"></span>
+            </p>
+            <p class="card-text">
+                <strong>Date of Start:</strong> <span th:text="${course.dateOfStart}"></span>
+            </p>
+            <a th:href="@{/companies/{companyId}/courses/{courseId}/get(companyId=${company.id}, courseId=${course.id})}" class="btn btn-primary">Open</a>
+
+        </div>
+    </div>
+
+</div>
+<div>
+    <a th:href="@{/companies/{companyId}/get(companyId=${company.id})}" class="btn btn-primary">Back</a>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
